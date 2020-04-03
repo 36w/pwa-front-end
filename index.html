@@ -131,8 +131,8 @@
             return null;
         }
 
-        function storyList(userId) {
-            socket.emit('storyList', {userId:userId});
+        function storyList(userId,recommendType) {
+            socket.emit('storyList', {userId:userId,recommendType:recommendType});
         }
 
         socket.on('storyListResult', function (data) {
@@ -251,7 +251,7 @@
             }else{
                 $('#home-href').attr('href','login.html');
             }
-            storyList(userId);
+            storyList(userId,0);
 
             $(document).on('mouseover','.startUl',function(event){
                 /*需要注意的就是事件里边的$(this)指的就是被点击的元素而不是$(document)*/
@@ -282,7 +282,7 @@
                             arr[i].className='startBg';
                             console.log('i3',number);
                         }
-                        socket.emit('changeLike', {userId:userId,storyId:storyId,likeId:number,likeName:''});
+                        socket.emit('changeLike', {userId:userId,storyId:storyId,likeId:likeId,likeName:'',creationTime:new Date().getTime()});
                     }
                 }
             });
@@ -301,7 +301,7 @@
                 $(this).siblings(".btn").removeClass("btnAdd");
                 let storyId=$(this).attr("storyId");
                 let likeId=$(this).attr("likeId");
-                socket.emit('changeLike', {userId:userId,storyId:storyId,likeId:likeId,likeName:''});
+                socket.emit('changeLike', {userId:userId,storyId:storyId,likeId:likeId,likeName:'',creationTime:new Date().getTime()});
             });
             $(".ol-nav li").click(function () {
                 //获取点击的元素给其添加样式，讲其兄弟元素的样式移除
@@ -311,6 +311,7 @@
                 console.log(index);
                 // $(this).parent().siblings().children().eq(index).addClass("active")
                 //     .siblings().removeClass("active");
+                storyList(userId,index);
             });
         };
 
