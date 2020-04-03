@@ -71,10 +71,6 @@
     </style>
     <script src="socket.io.js"></script>
     <script type="text/javascript">
-        // 建立连接
-        var socket = io.connect('http://localhost:8081');
-        // var socket = io.connect('http://192.168.99.39:8081');
-        // var socket = io.connect('http://192.168.124.11:8081');
         if ('serviceWorker' in navigator) { // 浏览器支持SW
             navigator.serviceWorker.register('sw.js').then(function (registration) {
                 console.log('ServiceWorker registration successful with scope: ', registration.scope);
@@ -83,6 +79,10 @@
             });
         }
 
+        // 建立连接
+        var socket = io.connect('http://localhost:8081');
+        // var socket = io.connect('http://192.168.99.39:8081');
+        // var socket = io.connect('http://192.168.124.11:8081');
         function GetQueryValue(queryName) {
             var query = decodeURI(window.location.search.substring(1));
             var vars = query.split("&");
@@ -281,7 +281,7 @@
                 <div></div>
                 <input type="file" id='id-img1' name='img1'  accept="image/*" multiple="multiple" />
 
-                <!--<div id="img-list" style="width:100%;"></div>-->
+                <div id="img-list" style="width:100%;"></div>
             </div>
         </div>
         <div class="row" style="padding-top:20px;">
