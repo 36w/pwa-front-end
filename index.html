@@ -118,8 +118,8 @@
         }
 
         // 建立连接
-        var socket = io.connect('http://localhost:8081');
-        // var socket = io.connect('http://192.168.99.39:8081');
+        // var socket = io.connect('http://localhost:8081');
+        var socket = io.connect('http://192.168.99.39:8081');
         // var socket = io.connect('http://192.168.124.11:8081');
         function GetQueryValue(queryName) {
             var query = decodeURI(window.location.search.substring(1));
@@ -266,47 +266,37 @@
     </script>
 </head>
 <body>
-<div style="background-color:#515bbc;">
-    <div class="container">
-        <nav class="navbar navbar-default" style="margin-bottom: 0;border-radius: 0;background-color:#515bbc;border-color: #515bbc">
-            <div class="container-fluid">
-                <!-- Brand and toggle get grouped for better mobile display -->
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="#">故事</a>
-                </div>
+    <div style="background-color:#515bbc;">
+        <div class="container">
+            <nav class="navbar navbar-default" style="margin-bottom: 0;border-radius: 0;background-color:#515bbc;border-color: #515bbc">
+                <div class="container-fluid">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="#">故事</a>
+                    </div>
 
-                <!-- Collect the nav links, forms, and other content for toggling -->
-                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                    <ul class="nav navbar-nav">
-                        <li class="active"><a href="#">首页</a></li>
-                        <li><a id="home-href" href="newStory.html">创建故事</a></li>
-                    </ul>
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <ul class="nav navbar-nav">
+                            <li class="active"><a href="#">首页</a></li>
+                            <li><a id="home-href" href="newStory.html">创建故事</a></li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
-        </nav>
+            </nav>
+        </div>
     </div>
-</div>
-<ol class="cl ol-nav">
-    <li class="fl li-select" style="margin-right: 10px;">推荐</li>
-    <li class="fl">最新</li>
-</ol>
-<div id="add-list">
-
-</div>
-
-<!--<ul class="startUl">-->
-<!--<li></li>-->
-<!--<li></li>-->
-<!--<li></li>-->
-<!--<li></li>-->
-<!--<li></li>-->
-<!--</ul>-->
-<!--<p id="pingfen">暂无评价</p>-->
+    <ol class="cl ol-nav">
+        <li class="fl li-select" style="margin-right: 10px;">推荐</li>
+        <li class="fl">最新</li>
+    </ol>
+    <div id="add-list"></div>
+<div>123</div>
 </body>
 </html>
