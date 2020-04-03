@@ -301,7 +301,7 @@
                 $(this).siblings(".btn").removeClass("btnAdd");
                 let storyId=$(this).attr("storyId");
                 let likeId=$(this).attr("likeId");
-                socket.emit('changeLike', {storyId:storyId,likeId:likeId,likeName:''});
+                socket.emit('changeLike', {userId:userId,storyId:storyId,likeId:likeId,likeName:''});
             });
             $(".ol-nav li").click(function () {
                 //获取点击的元素给其添加样式，讲其兄弟元素的样式移除
