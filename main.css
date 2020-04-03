@@ -1,0 +1,29 @@
+*{
+    margin:0;
+    padding:0;
+}
+.fl{
+    float: left;
+}
+.fr{
+    float: right;
+}
+.cl:after{
+    display: block;
+    content: '';
+    clear: both;
+}
+.cl{
+    zoom: 1;
+}
+ul,ol{
+    list-style: none;
+}
+i{
+    font-style: normal;
+}
+a{ text-decoration:none}
+a:hover{ text-decoration:none}
+h3{
+    color: #f00;
+}

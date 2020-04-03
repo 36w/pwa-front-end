@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>导航</title>
+    <link rel="stylesheet" href="main.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/index.css">
+    <style>
+        body {
+            background: #f9fbfe;
+        }
+        .navbar-default .navbar-toggle{
+            border-color: #fff;
+        }
+        .navbar-default .navbar-toggle .icon-bar{
+            background-color: #fff;
+        }
+        .navbar-default .navbar-brand{
+            color:#fff;
+        }
+        .navbar-default .navbar-brand:hover{
+            color:#fff;
+        }
+        .navbar-default .navbar-brand:visited{
+            color:#fff;
+        }
+        .navbar-default .navbar-nav>li>a{
+            color:#fff;
+        }
+        .navbar-default .navbar-nav>li>a:hover{
+            color:#fff;
+        }
+        .navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover{
+            background: #3d4697;
+            color:#fff;
+        }
+    </style>
+</head>
+<body>
+<div style="background-color:#515bbc;">
+    <div class="container">
+        <nav class="navbar navbar-default" style="margin-bottom: 0;border-radius: 0;background-color:#515bbc;border-color: #515bbc">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#" target="headFrame">故事</a>
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href="#" target="headFrame">首页</a></li>
+                        <li><a href="newStory.html" target="headFrame">创建故事</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+</div>
+
+<script>
+    if ('serviceWorker' in navigator) { // 浏览器支持SW
+        navigator.serviceWorker.register('sw.js').then(function (registration) {
+            console.log('ServiceWorker registration successful with scope: ', registration.scope);
+        }).catch(function (err) {
+            console.log('ServiceWorker registration failed: ', err);
+        });
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">-->
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" sizes="144x144" href="images/logo-144.png">
+    <title>创建故事</title>
+    <link rel="stylesheet" href="main.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/index.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+    <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
+    <style>
+        body {
+            background: #f9fbfe;
+        }
+        .navbar-default .navbar-toggle{
+            border-color: #fff;
+        }
+        .navbar-default .navbar-toggle .icon-bar{
+            background-color: #fff;
+        }
+        .navbar-default .navbar-brand{
+            color:#fff;
+        }
+        .navbar-default .navbar-brand:hover{
+            color:#fff;
+        }
+        .navbar-default .navbar-brand:visited{
+            color:#fff;
+        }
+        .navbar-default .navbar-nav>li>a{
+            color:#fff;
+        }
+        .navbar-default .navbar-nav>li>a:hover{
+            color:#fff;
+        }
+        .navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover{
+            background: #3d4697;
+            color:#fff;
+        }
+        .navbar-default .navbar-toggle:focus, .navbar-default .navbar-toggle:hover{
+            background: none;
+        }
+        .btn.focus, .btn:focus, .btn:hover{
+            color:#fff;
+        }
+        .btn.active, .btn:active{
+            box-shadow: none;
+        }
+
+        #div-display{
+            position: absolute;
+            bottom:0;
+            width:80%;
+            display: none;
+        }
+        #img-list img{
+            /*width:100%;*/
+        }
+        #storyType{
+            width:120px;
+            height:24px;
+        }
+    </style>
+    <script src="socket.io.js"></script>
+    <script type="text/javascript">
+        // 建立连接
+        var socket = io.connect('http://localhost:8081');
+        // var socket = io.connect('http://192.168.99.39:8081');
+        // var socket = io.connect('http://192.168.124.11:8081');
+        if ('serviceWorker' in navigator) { // 浏览器支持SW
+            navigator.serviceWorker.register('sw.js').then(function (registration) {
+                console.log('ServiceWorker registration successful with scope: ', registration.scope);
+            }).catch(function (err) {
+                console.log('ServiceWorker registration failed: ', err);
+            });
+        }
+
+        function GetQueryValue(queryName) {
+            var query = decodeURI(window.location.search.substring(1));
+            var vars = query.split("&");
+            for (var i = 0; i < vars.length; i++) {
+                var pair = vars[i].split("=");
+                if (pair[0] == queryName) { return pair[1]; }
+            }
+            return null;
+        }
+
+        //故事类型
+        function storyType() {
+            socket.emit('storyType', {});
+        }
+        socket.on('storyTypeResult', function (data) {
+            console.log('storyTypeResult',data,data.length);
+            var html='';
+            for(var i=0;i<data.data.length;i++){
+                var list_th = "<option value="+data.data[i].storyTypeId+">"+ data.data[i].storyTypeName+"</option>";
+                html += list_th;
+            }
+            $("#storyType").append(html);//追加到标签最后
+            console.log(html);
+        });
+
+        window.onload=function(){
+            var userName=GetQueryValue('userName');
+            // console.log(userName);
+            var userId=GetQueryValue('userId');
+            // console.log(userId);
+            if(userId){
+                $('#newStory-href').attr('href','index.html?userId='+userId+'&userName='+userName);
+            }else{
+                window.location.href="login.html";
+            }
+
+            document.getElementById("id-img1").addEventListener("change", function(){
+                $('#img-list img').remove();
+                var ua = navigator.userAgent.toLowerCase();
+                var isiOS = (ua.indexOf('iphone') != -1) || (ua.indexOf('ipad') != -1);  // ios终端
+                if(!isiOS){
+                    $("#div-display").css({"display":"none"});
+                    onFileChange(this,"img1-result","face-empty-result")
+                }else{
+                    $("#div-display").css({"display":"none"});
+                    onFileChange(this,"img1-result","face-empty-result")
+                }
+            });
+            document.getElementsByClassName("btn")[0].addEventListener("click", function(){
+                submit();
+            });
+            /**
+             * 选中图片时的处理
+             * @param {*} fileObj input file元素
+             * @param {*} el //选中后用于显示图片的元素ID
+             * @param {*} btnel //未选中图片时显示的按钮区域ID
+             */
+            function onFileChange(fileObj,el,btnel){
+                console.log(fileObj.files,fileObj.value);
+                var windowURL = window.URL || window.webkitURL;
+
+                if(fileObj.files.length){
+                    if(fileObj.files.length<=3){
+                        var imgList = document.getElementById("img-list");
+                        for(var i = 0; i < fileObj.files.length; i++){
+                            //添加 img
+                            var img = document.createElement("img");
+
+                            //设置 img 属性，如 id
+                            img.setAttribute("id", "newImg"+[i]);
+
+                            //设置 img 图片地址
+                            img.src = windowURL.createObjectURL(fileObj.files[i]);
+                            imgList.appendChild(img);
+                        }
+                    }else{
+                        alert('图片最多上传3张');
+                    }
+                }else{
+                    alert('请选择图片上传')
+                }
+            }
+            /**
+             * 将图片返回base64格式的数据
+             * @param {*} image img元素
+             */
+            function compressImageTobase64(image,width,height,qua){
+                console.log(image.width,image.height);
+                var canvas = document.createElement("canvas");
+                canvas.width = image.width;
+                canvas.height = image.height;
+                var ctx = canvas.getContext("2d");
+                ctx.drawImage(image, 0, 0, image.width, image.height);
+                var ext = image.src.substring(image.src.lastIndexOf(".")+1).toLowerCase();
+                var dataURL = canvas.toDataURL("image/"+ext);
+                return dataURL;
+            }
+            //提交
+            function submit(){
+                let date = new Date();
+                let year = date.getFullYear();
+                let month = date.getMonth() + 1;
+                let day = date.getDate();
+                // this.day = new Array("星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六")[date.getDay()];
+                let hour = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
+                let minute = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+                let second = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+                let currentTime =  year + "." + month + "." + day + " "+hour + ":" + minute + ":" + second;
+                if($('.form-control').val()){
+                    if($('.form-control').val().length>150){
+                        alert('故事内容不超过150个字符');
+                        return false;
+                    }
+                }else{
+                    alert('请输入故事内容');
+                    return false;
+                }
+
+                //提交数据
+                console.log(document.getElementById("img-list").getElementsByTagName("img"));
+                var imgList=document.getElementById("img-list").getElementsByTagName("img");
+                var images=[];
+                for(var i = 0; i < imgList.length; i++){
+                    images.push(compressImageTobase64(imgList[i]));
+                }
+                console.log(images);
+                if(images.length){
+                    if($('#storyType').val()!='请选择类型'){
+                        var storyTypeId=$('#storyType').val();
+                        var options=$("#storyType option:selected");//获取当前选择项.
+                        var storyTypeName=options.text();//获取当前选择项的文本.
+                        console.log(storyTypeId,storyTypeName);
+                        socket.emit('uploadStory', { userId:userId, userName:userName, storyContent:$('.form-control').val(), imgData:images,likeId:-1, likeName:'暂无评价', storyTypeId:storyTypeId, storyTypeName:storyTypeName, creationTime:currentTime});
+                    }else{
+                        alert('请选择故事类型');
+                    }
+                }else{
+                    alert('请上传图片');
+                    return false;
+                }
+            }
+            socket.on('uploadStoryResult', function (data) {
+                console.log('uploadStoryResult',data);
+                if(data.code=='200'){
+                    alert('故事保存成功');
+                }else{
+                    alert(data.msg);
+                }
+            });
+
+            storyType();
+        };
+    </script>
+</head>
+<body>
+    <div style="background-color:#515bbc;">
+        <div class="container">
+            <nav class="navbar navbar-default" style="margin-bottom: 0;border-radius: 0;background-color:#515bbc;border-color: #515bbc">
+                <div class="container-fluid">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="#">故事</a>
+                    </div>
+
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <ul class="nav navbar-nav">
+                            <li><a id="newStory-href" href="index.html">首页</a></li>
+                            <li class="active"><a href="#">创建故事</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    <div class="container">
+        <!--新建故事-->
+        <div class="row" style="padding:20px 0;">
+            <div class="col-md-2">故事内容：</div>
+            <div class="col-md-10">
+                <form id="form1">
+                    <textarea class="form-control" rows="3" name="text" placeholder="说点什么吧"></textarea>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">图片：</div>
+            <div class="col-md-3">
+                <div></div>
+                <input type="file" id='id-img1' name='img1'  accept="image/*" multiple="multiple" />
+
+                <!--<div id="img-list" style="width:100%;"></div>-->
+            </div>
+        </div>
+        <div class="row" style="padding-top:20px;">
+            <div class="col-md-2">故事类型:</div>
+            <div class="col-md-2">
+                <select id="storyType">
+                    <option>请选择类型</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2 col-md-offset-5">
+                <button class="submit btn">提交</button>
+            </div>
+        </div>
+        <!--新建故事end-->
+    </div>
+</body>
+</html>

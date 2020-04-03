@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">-->
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" sizes="144x144" href="images/logo-144.png">
+    <!--<title>首页</title>-->
+    <link rel="stylesheet" href="main.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/index.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+    <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
+    <style>
+        body {
+            background: #f9fbfe;
+        }
+        .navbar-default .navbar-toggle{
+            border-color: #fff;
+        }
+        .navbar-default .navbar-toggle .icon-bar{
+            background-color: #fff;
+        }
+        .navbar-default .navbar-brand{
+            color:#fff;
+        }
+        .navbar-default .navbar-brand:hover{
+            color:#fff;
+        }
+        .navbar-default .navbar-brand:visited{
+            color:#fff;
+        }
+        .navbar-default .navbar-nav>li>a{
+            color:#fff;
+        }
+        .navbar-default .navbar-nav>li>a:hover{
+            color:#fff;
+        }
+        .navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover{
+            background: #3d4697;
+            color:#fff;
+        }
+        .navbar-default .navbar-toggle:focus, .navbar-default .navbar-toggle:hover{
+            background: none;
+        }
+
+        .startUl{
+            width:118px;
+            margin-bottom: 0;
+        }
+        .startUl li{
+            width:20px;
+            height:20px;
+            display: inline-block;
+            list-style: none;
+            background-image: url('images/start.png');
+            background-size: 100% 100%;
+        }
+        .startUl .startBg{
+            background-image: url('images/start2.png');
+        }
+        .startAdd .startBg{
+            background-image: url('images/start.png');
+        }
+        .btn{
+            width:50px;
+            padding:0;
+            font-size: 12px;
+            margin-top: 2px;
+            margin-left: 10px;
+            color: #797979;
+            background: rgb(239,243,252);
+        }
+        .btn.focus, .btn:focus, .btn:hover{
+            color: #797979;
+        }
+        .btnAdd{
+            color:#fff;
+            background: #6e79e2;
+        }
+        .btnAdd.focus, .btnAdd:focus, .btnAdd:hover{
+            color:#fff;
+        }
+        #pingfen{
+            font-size: 12px;
+            line-height: 21px;
+            color:rgb(140, 151, 178);
+        }
+        .evaluate{
+            padding-top:10px;
+        }
+        .ol-nav{
+            width:90px;
+            margin:0 auto;
+        }
+        .ol-nav li{
+            line-height: 34px;
+            width:40px;
+            text-align: center;
+        }
+        .ol-nav .li-select{
+            border-bottom: 2px solid #6e79e2;
+        }
+    </style>
+    <script src="socket.io.js"></script>
+    <script>
+        // 建立连接
+        var socket = io.connect('http://localhost:8081');
+        // var socket = io.connect('http://192.168.99.39:8081');
+        // var socket = io.connect('http://192.168.124.11:8081');
+
+        if ('serviceWorker' in navigator) { // 浏览器支持SW
+            navigator.serviceWorker.register('sw.js').then(function (registration) {
+                console.log('ServiceWorker registration successful with scope: ', registration.scope);
+            }).catch(function (err) {
+                console.log('ServiceWorker registration failed: ', err);
+            });
+        }
+        function GetQueryValue(queryName) {
+            var query = decodeURI(window.location.search.substring(1));
+            var vars = query.split("&");
+            for (var i = 0; i < vars.length; i++) {
+                var pair = vars[i].split("=");
+                if (pair[0] == queryName) { return pair[1]; }
+            }
+            return null;
+        }
+
+        function storyList() {
+            socket.emit('storyList', {});
+        }
+
+        socket.on('storyListResult', function (data) {
+            console.log('storyListResult',data,data.length);
+            var html = "";
+            for (var i = 0; i < data.data.length; i++) {
+                var imgList="";
+                for (var j = 0; j < data.data[i].imgDatabase64.length; j++) {
+                    imgList+="<div class='col-md-4'>"+
+                        "<img src="+data.data[i].imgDatabase64[j]+">"+
+                        "</div>"
+                }
+                var start="";
+                if(data.data[i].likeId){
+                    if(data.data[i].likeId==-1){
+                        start+="<div class='cl evaluate'>"+
+                                "<button class='fr btn'"+ "likeId="+4+" storyId="+data.data[i].storyId+">"+'最喜欢'+"</button>"+
+                                "<button class='fr btn'"+ "likeId="+3+" storyId="+data.data[i].storyId+">"+'很喜欢'+"</button>"+
+                                "<button class='fr btn'"+ "likeId="+2+"  storyId="+data.data[i].storyId+">"+'喜欢'+"</button>"+
+                                "<button class='fr btn'"+ "likeId="+1+"  storyId="+data.data[i].storyId+">"+'一般喜欢'+"</button>"+
+                                "<button class='fr btn'"+ "likeId="+0+" storyId="+data.data[i].storyId+">"+'不喜欢'+"</button>"+
+                                // "<ul class='startUl fr'"+ "likeId="+data.data[i].likeId+"  storyId="+data.data[i].storyId+">"+"<li>"+ "</li>"+ "<li>"+ "</li>"+ "<li>"+ "</li>"+ "<li>"+ "</li>"+ "<li>"+ "</li>"+"</ul>"+
+                                // "<p id='pingfen'>"+ data.data[i].likeName + "</p>"+
+                        "</div>";
+                    }else if(data.data[i].likeId==1){
+                        start+="<div class='cl evaluate'>"+
+                                "<button class='fr btn'"+ "likeId="+4+" storyId="+data.data[i].storyId+">"+'最喜欢'+"</button>"+
+                                "<button class='fr btn'"+ "likeId="+3+" storyId="+data.data[i].storyId+">"+'很喜欢'+"</button>"+
+                                "<button class='fr btn'"+ "likeId="+2+"  storyId="+data.data[i].storyId+">"+'喜欢'+"</button>"+
+                                "<button class='fr btn btnAdd'"+ "likeId="+1+"  storyId="+data.data[i].storyId+">"+'一般喜欢'+"</button>"+
+                                "<button class='fr btn'"+ "likeId="+0+" storyId="+data.data[i].storyId+">"+'不喜欢'+"</button>"+
+
+                                // "<button class='fr btn' storyId="+data.data[i].storyId+">"+'不喜欢'+"</button>"+
+                                // "<ul class='startUl fr'"+ "likeId="+data.data[i].likeId+"  storyId="+data.data[i].storyId+">"+ "<li class='startBg'>"+ "</li>"+ "<li>"+ "</li>"+ "<li>"+ "</li>"+ "<li>"+ "</li>"+ "<li>"+ "</li>"+ "</ul>"+
+                            "</div>";
+                    }else if(data.data[i].likeId==2){
+                        start+="<div class='cl evaluate'>"+
+                                "<button class='fr btn'"+ "likeId="+4+" storyId="+data.data[i].storyId+">"+'最喜欢'+"</button>"+
+                                "<button class='fr btn'"+ "likeId="+3+" storyId="+data.data[i].storyId+">"+'很喜欢'+"</button>"+
+                                "<button class='fr btn btnAdd'"+ "likeId="+2+"  storyId="+data.data[i].storyId+">"+'喜欢'+"</button>"+
+                                "<button class='fr btn'"+ "likeId="+1+"  storyId="+data.data[i].storyId+">"+'一般喜欢'+"</button>"+
+                                "<button class='fr btn'"+ "likeId="+0+" storyId="+data.data[i].storyId+">"+'不喜欢'+"</button>"+
+
+                                // "<button class='fr btn' storyId="+data.data[i].storyId+">"+'不喜欢'+"</button>"+
+                                // "<ul class='startUl fr'"+ "likeId="+data.data[i].likeId+"  storyId="+data.data[i].storyId+">"+ "<li class='startBg'>"+ "</li>"+ "<li class='startBg'>"+ "</li>"+ "<li>"+ "</li>"+ "<li>"+ "</li>"+ "<li>"+ "</li>"+ "</ul>"+
+                            "</div>";
+                    }else if(data.data[i].likeId==3){
+                        start+="<div class='cl evaluate'>"+
+                                "<button class='fr btn'"+ "likeId="+4+" storyId="+data.data[i].storyId+">"+'最喜欢'+"</button>"+
+                                "<button class='fr btn btnAdd'"+ "likeId="+3+" storyId="+data.data[i].storyId+">"+'很喜欢'+"</button>"+
+                                "<button class='fr btn'"+ "likeId="+2+"  storyId="+data.data[i].storyId+">"+'喜欢'+"</button>"+
+                                "<button class='fr btn'"+ "likeId="+1+"  storyId="+data.data[i].storyId+">"+'一般喜欢'+"</button>"+
+                                "<button class='fr btn'"+ "likeId="+0+" storyId="+data.data[i].storyId+">"+'不喜欢'+"</button>"+
+
+                                // "<button class='fr btn' storyId="+data.data[i].storyId+">"+'不喜欢'+"</button>"+
+                                // "<ul class='startUl fr'"+ "likeId="+data.data[i].likeId+" storyId="+data.data[i].storyId+">"+ "<li class='startBg'>"+ "</li>"+ "<li class='startBg'>"+ "</li>"+ "<li class='startBg'>"+ "</li>"+ "<li>"+ "</li>"+ "<li>"+ "</li>"+ "</ul>"+
+                            "</div>";
+                    } else if(data.data[i].likeId==4){
+                        start+="<div class='cl evaluate'>"+
+                                "<button class='fr btn btnAdd'"+ "likeId="+4+" storyId="+data.data[i].storyId+">"+'最喜欢'+"</button>"+
+                                "<button class='fr btn'"+ "likeId="+3+" storyId="+data.data[i].storyId+">"+'很喜欢'+"</button>"+
+                                "<button class='fr btn'"+ "likeId="+2+"  storyId="+data.data[i].storyId+">"+'喜欢'+"</button>"+
+                                "<button class='fr btn'"+ "likeId="+1+"  storyId="+data.data[i].storyId+">"+'一般喜欢'+"</button>"+
+                                "<button class='fr btn'"+ "likeId="+0+" storyId="+data.data[i].storyId+">"+'不喜欢'+"</button>"+
+                                // "<button class='fr btn' storyId="+data.data[i].storyId+">"+'不喜欢'+"</button>"+
+                                // "<ul class='startUl fr'"+ "likeId="+data.data[i].likeId+"  storyId="+data.data[i].storyId+">"+ "<li class='startBg'>"+ "</li>"+ "<li class='startBg'>"+ "</li>"+ "<li class='startBg'>"+ "</li>"+ "<li class='startBg'>"+ "</li>"+ "<li>"+ "</li>"+ "</ul>"+
+                            "</div>";
+                    }
+                    // else if(data.data[i].likeId==5){
+                    //     start+="<div class='cl evaluate'>"+
+                    //             "<button class='fr btn' storyId="+data.data[i].storyId+">"+'不喜欢'+"</button>"+
+                    //             "<ul class='startUl fr'"+ "likeId="+data.data[i].likeId+"  storyId="+data.data[i].storyId+">"+ "<li class='startBg'>"+ "</li>"+ "<li class='startBg'>"+ "</li>"+ "<li class='startBg'>"+ "</li>"+ "<li class='startBg'>"+ "</li>"+ "<li class='startBg'>"+ "</li>"+ "</ul>"+
+                    //         "</div>";
+                    // }
+                }else{
+                    start+="<div class='cl evaluate'>"+
+                            "<button class='fr btn'"+ "likeId="+4+" storyId="+data.data[i].storyId+">"+'最喜欢'+"</button>"+
+                            "<button class='fr btn'"+ "likeId="+3+" storyId="+data.data[i].storyId+">"+'很喜欢'+"</button>"+
+                            "<button class='fr btn'"+ "likeId="+2+"  storyId="+data.data[i].storyId+">"+'喜欢'+"</button>"+
+                            "<button class='fr btn'"+ "likeId="+1+"  storyId="+data.data[i].storyId+">"+'一般喜欢'+"</button>"+
+                            "<button class='fr btn btnAdd'"+ "likeId="+0+" storyId="+data.data[i].storyId+">"+'不喜欢'+"</button>"+
+                            // "<ul class='startUl fr'"+ "likeId="+data.data[i].likeId+"  storyId="+data.data[i].storyId+">"+ "<li>"+ "</li>"+ "<li>"+ "</li>"+ "<li>"+ "</li>"+ "<li>"+ "</li>"+ "<li>"+ "</li>"+ "</ul>"+
+                        "</div>";
+                }
+                var list_th = "<div class='container' style='border-bottom: 1px solid rgb(218, 224, 235);'>"+
+                    " <div class='container story'>" +
+                        "<div class='describe'>" +
+                            "<div>"+
+                                "<p>"+
+                                    "<span class='userName'>"+ data.data[i].userName +"</span>"+
+                                    "<span>"+ data.data[i].creationTime +"</span>"+
+                                "</p>"+
+                                "<p>"+ data.data[i].storyContent +"</p>"+
+                            "</div>"+
+                        "</div>" +
+                        "<div class='row'>" +
+                            imgList+
+                        "</div>" +
+                        start+
+                    "</div>"+
+                "</div>";
+                html += list_th;
+            }
+            $("#add-list").append(html);//追加到标签最后
+            console.log(html);
+        });
+
+        window.onload = function(){
+            //要执行的js代码段
+            var userName=GetQueryValue('userName');
+            // console.log(userName);
+            var userId=GetQueryValue('userId');
+            // console.log(userId);
+            if(userId){
+                $('#home-href').attr('href','newStory.html?userId='+userId+'&userName='+userName);
+            }else{
+                $('#home-href').attr('href','login.html');
+            }
+            storyList();
+
+            $(document).on('mouseover','.startUl',function(event){
+                /*需要注意的就是事件里边的$(this)指的就是被点击的元素而不是$(document)*/
+                // console.log($(this)[0]);
+                var arr=$(this)[0].children;
+                // console.log(arr);
+                console.log($(this).attr("storyId"),$(this).attr("likeId"));
+                let storyId=$(this).attr("storyId");
+                var i;
+                for(var i=0;i<arr.length;i++){
+                    arr[i].index=i;
+                    arr[i].onclick=function(e){
+                        // 清空
+                        for(var i=0;i<arr.length;i++){
+                            arr[i].className='';
+                            // pingfen.innerHTML='暂无评价'
+                            console.log('i1',number-1);
+                        }
+                        var number=this.index+1;//星星高亮个数
+                        //方法一
+                        var pingArr=['0','1','2','3','4'];
+                        for (var i = 0; i < pingArr.length; i++) {
+                            // pingfen.innerHTML=pingArr[number-1];
+                            console.log('i2',number-1);
+                        }
+                        for(var i=0;i<=this.index;i++){
+                            // this.setAttribute("class", "startBg");
+                            arr[i].className='startBg';
+                            console.log('i3',number);
+                        }
+                        socket.emit('changeLike', {storyId:storyId,likeId:number,likeName:''});
+                    }
+                }
+            });
+            socket.on('changeLikeResult', function (data) {
+                console.log('changeLikeResult',data);
+                if(data.code=='200'){
+                    alert('评价成功');
+                    // window.location.reload();
+                }else{
+                    alert(data.msg);
+                }
+            });
+            $(document).on('click','.btn',function(event){
+                // console.log($(this).siblings("ul").addClass("startAdd"));
+                $(this).addClass("btnAdd");
+                $(this).siblings(".btn").removeClass("btnAdd");
+                let storyId=$(this).attr("storyId");
+                let likeId=$(this).attr("likeId");
+                socket.emit('changeLike', {storyId:storyId,likeId:likeId,likeName:''});
+            });
+            $(".ol-nav li").click(function () {
+                //获取点击的元素给其添加样式，讲其兄弟元素的样式移除
+                $(this).addClass("li-select").siblings().removeClass("li-select");
+                //获取选中元素的下标
+                var index = $(this).index();
+                console.log(index);
+                // $(this).parent().siblings().children().eq(index).addClass("active")
+                //     .siblings().removeClass("active");
+            });
+        };
+
+
+    </script>
+</head>
+<body>
+    <div style="background-color:#515bbc;">
+        <div class="container">
+            <nav class="navbar navbar-default" style="margin-bottom: 0;border-radius: 0;background-color:#515bbc;border-color: #515bbc">
+                <div class="container-fluid">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="#">故事</a>
+                    </div>
+
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <ul class="nav navbar-nav">
+                            <li class="active"><a href="#">首页</a></li>
+                            <li><a id="home-href" href="newStory.html">创建故事</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+    <ol class="cl ol-nav">
+        <li class="fl li-select" style="margin-right: 10px;">推荐</li>
+        <li class="fl">最新</li>
+    </ol>
+    <div id="add-list">
+
+    </div>
+
+    <!--<ul class="startUl">-->
+        <!--<li></li>-->
+        <!--<li></li>-->
+        <!--<li></li>-->
+        <!--<li></li>-->
+        <!--<li></li>-->
+    <!--</ul>-->
+    <!--<p id="pingfen">暂无评价</p>-->
+</body>
+</html>
