@@ -2,7 +2,7 @@ var version = 'hello-pwa3';
 
 // Serverice Worker 安装成功后触发该事件
 self.addEventListener('install', event => {
-    console.log('event:',event);
+    console.log('install:安装成功后触发该事件');
     // sw.js 有更新，立即生效
     event.waitUntil(
         caches.open(version)
@@ -16,7 +16,8 @@ self.addEventListener('install', event => {
                     './register.html',
                     './css/index.css',
                     './main.css',
-                    './socket.io.js'
+                    './socket.io.js',
+                    './js/indexedDb.js'
                 ]
             )).then(() => self.skipWaiting())
     );
@@ -24,6 +25,7 @@ self.addEventListener('install', event => {
 
 // sw.js 有更新时触发该事件
 self.addEventListener('activate', function (event) {
+    console.log('activate有更新时触发该事件')
     event.waitUntil(
         Promise.all([
             // 更新客户端
@@ -45,8 +47,8 @@ self.addEventListener('activate', function (event) {
 
 // 网页发送请求触发该事件
 self.addEventListener('fetch', function (event) {
+    console.log('fetch有更新时触发该事件')
     // 打印请求资源网址
-    console.log('url is', event.request.url);
     event.respondWith(
         // caches 是全局变量，它就是缓存对象
         // 这一步是判断缓存中是否有该资源

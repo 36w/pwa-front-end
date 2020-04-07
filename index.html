@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <!--<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">-->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="manifest" href="manifest.json">
@@ -107,6 +108,103 @@
             border-bottom: 2px solid #6e79e2;
         }
     </style>
+    <script src="js/indexedDb.js"></script>
+    <script>
+        setTimeout(() => {
+            draw()
+        }, 1000);
+
+        function draw() {
+
+            var data = {}
+            var html = "";
+            INDEXDB.getAllData(myDB.db, myDB.ojstore.name, function (data) {
+
+                data.data = data
+                for (var i = 0; i < data.data.length; i++) {
+                    var imgList = "";
+                    for (var j = 0; j < data.data[i].imgDatabase64.length; j++) {
+                        imgList += "<div class='col-md-4'>" +
+                            "<img src=" + data.data[i].imgDatabase64[j] + ">" +
+                            "</div>"
+                    }
+                    var start = "";
+                    if (data.data[i].likeId) {
+                        if (data.data[i].likeId == -1) {
+                            start += "<div class='cl evaluate'>" +
+                                "<button class='fr btn'" + "likeId=" + 4 + " storyId=" + data.data[i].storyId + ">" + '最喜欢' + "</button>" +
+                                "<button class='fr btn'" + "likeId=" + 3 + " storyId=" + data.data[i].storyId + ">" + '很喜欢' + "</button>" +
+                                "<button class='fr btn'" + "likeId=" + 2 + "  storyId=" + data.data[i].storyId + ">" + '喜欢' + "</button>" +
+                                "<button class='fr btn'" + "likeId=" + 1 + "  storyId=" + data.data[i].storyId + ">" + '一般喜欢' + "</button>" +
+                                "<button class='fr btn'" + "likeId=" + 0 + " storyId=" + data.data[i].storyId + ">" + '不喜欢' + "</button>" +
+                                "</div>";
+                        } else if (data.data[i].likeId == 1) {
+                            start += "<div class='cl evaluate'>" +
+                                "<button class='fr btn'" + "likeId=" + 4 + " storyId=" + data.data[i].storyId + ">" + '最喜欢' + "</button>" +
+                                "<button class='fr btn'" + "likeId=" + 3 + " storyId=" + data.data[i].storyId + ">" + '很喜欢' + "</button>" +
+                                "<button class='fr btn'" + "likeId=" + 2 + "  storyId=" + data.data[i].storyId + ">" + '喜欢' + "</button>" +
+                                "<button class='fr btn btnAdd'" + "likeId=" + 1 + "  storyId=" + data.data[i].storyId + ">" + '一般喜欢' + "</button>" +
+                                "<button class='fr btn'" + "likeId=" + 0 + " storyId=" + data.data[i].storyId + ">" + '不喜欢' + "</button>" +
+                                "</div>";
+                        } else if (data.data[i].likeId == 2) {
+                            start += "<div class='cl evaluate'>" +
+                                "<button class='fr btn'" + "likeId=" + 4 + " storyId=" + data.data[i].storyId + ">" + '最喜欢' + "</button>" +
+                                "<button class='fr btn'" + "likeId=" + 3 + " storyId=" + data.data[i].storyId + ">" + '很喜欢' + "</button>" +
+                                "<button class='fr btn btnAdd'" + "likeId=" + 2 + "  storyId=" + data.data[i].storyId + ">" + '喜欢' + "</button>" +
+                                "<button class='fr btn'" + "likeId=" + 1 + "  storyId=" + data.data[i].storyId + ">" + '一般喜欢' + "</button>" +
+                                "<button class='fr btn'" + "likeId=" + 0 + " storyId=" + data.data[i].storyId + ">" + '不喜欢' + "</button>" +
+                                "</div>";
+                        } else if (data.data[i].likeId == 3) {
+                            start += "<div class='cl evaluate'>" +
+                                "<button class='fr btn'" + "likeId=" + 4 + " storyId=" + data.data[i].storyId + ">" + '最喜欢' + "</button>" +
+                                "<button class='fr btn btnAdd'" + "likeId=" + 3 + " storyId=" + data.data[i].storyId + ">" + '很喜欢' + "</button>" +
+                                "<button class='fr btn'" + "likeId=" + 2 + "  storyId=" + data.data[i].storyId + ">" + '喜欢' + "</button>" +
+                                "<button class='fr btn'" + "likeId=" + 1 + "  storyId=" + data.data[i].storyId + ">" + '一般喜欢' + "</button>" +
+                                "<button class='fr btn'" + "likeId=" + 0 + " storyId=" + data.data[i].storyId + ">" + '不喜欢' + "</button>" +
+                                "</div>";
+                        } else if (data.data[i].likeId == 4) {
+                            start += "<div class='cl evaluate'>" +
+                                "<button class='fr btn btnAdd'" + "likeId=" + 4 + " storyId=" + data.data[i].storyId + ">" + '最喜欢' + "</button>" +
+                                "<button class='fr btn'" + "likeId=" + 3 + " storyId=" + data.data[i].storyId + ">" + '很喜欢' + "</button>" +
+                                "<button class='fr btn'" + "likeId=" + 2 + "  storyId=" + data.data[i].storyId + ">" + '喜欢' + "</button>" +
+                                "<button class='fr btn'" + "likeId=" + 1 + "  storyId=" + data.data[i].storyId + ">" + '一般喜欢' + "</button>" +
+                                "<button class='fr btn'" + "likeId=" + 0 + " storyId=" + data.data[i].storyId + ">" + '不喜欢' + "</button>" +
+                                "</div>";
+                        }
+                    } else {
+                        start += "<div class='cl evaluate'>" +
+                            "<button class='fr btn'" + "likeId=" + 4 + " storyId=" + data.data[i].storyId + ">" + '最喜欢' + "</button>" +
+                            "<button class='fr btn'" + "likeId=" + 3 + " storyId=" + data.data[i].storyId + ">" + '很喜欢' + "</button>" +
+                            "<button class='fr btn'" + "likeId=" + 2 + "  storyId=" + data.data[i].storyId + ">" + '喜欢' + "</button>" +
+                            "<button class='fr btn'" + "likeId=" + 1 + "  storyId=" + data.data[i].storyId + ">" + '一般喜欢' + "</button>" +
+                            "<button class='fr btn btnAdd'" + "likeId=" + 0 + " storyId=" + data.data[i].storyId + ">" + '不喜欢' + "</button>" +
+                            "</div>";
+                    }
+                    var list_th = "<div class='container' style='border-bottom: 1px solid rgb(218, 224, 235);'>" +
+                        " <div class='container story'>" +
+                        "<div class='describe'>" +
+                        "<div>" +
+                        "<p>" +
+                        "<span class='userName'>" + data.data[i].userName + "</span>" +
+                        "<span>" + data.data[i].creationTime + "</span>" +
+                        "</p>" +
+                        "<p>" + data.data[i].storyContent + "</p>" +
+                        "</div>" +
+                        "</div>" +
+                        "<div class='row'>" +
+                        imgList +
+                        "</div>" +
+                        start +
+                        "</div>" +
+                        "</div>";
+                    html += list_th;
+                }
+                $("#add-list").append(html);//追加到标签最后
+            });
+
+
+        }
+    </script>
     <script src="socket.io.js"></script>
     <script>
         if ('serviceWorker' in navigator) { // 浏览器支持SW
@@ -117,16 +215,9 @@
             });
         }
 
-        var indexedDB = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB || window.msIndexedDB;
-        if(!indexedDB) {
-            console.log("你的浏览器不支持IndexedDB");
-        }else{
-            console.log("你的浏览器支持IndexedDB");
-        }
-
         // 建立连接
-        var socket = io.connect('http://localhost:8081');
-        // var socket = io.connect('http://192.168.99.39:8081');
+        //var socket = io.connect('http://localhost:8081');
+        var socket = io.connect('http://192.168.99.39:8081');
         // var socket = io.connect('http://192.168.124.11:8081');
         function GetQueryValue(queryName) {
             var query = decodeURI(window.location.search.substring(1));
@@ -138,112 +229,34 @@
             return null;
         }
 
-        function storyList(userId,recommendType) {
-            socket.emit('storyList', {userId:userId,recommendType:recommendType});
+        function storyList(userId, recommendType) {
+            socket.emit('storyList', { userId: userId, recommendType: recommendType });
         }
 
         socket.on('storyListResult', function (data) {
-            console.log('storyListResult',data,data.length);
-            var html = "";
-            for (var i = 0; i < data.data.length; i++) {
-                var imgList="";
-                for (var j = 0; j < data.data[i].imgDatabase64.length; j++) {
-                    imgList+="<div class='col-md-4'>"+
-                        "<img src="+data.data[i].imgDatabase64[j]+">"+
-                        "</div>"
-                }
-                var start="";
-                if(data.data[i].likeId){
-                    if(data.data[i].likeId==-1){
-                        start+="<div class='cl evaluate'>"+
-                            "<button class='fr btn'"+ "likeId="+4+" storyId="+data.data[i].storyId+">"+'最喜欢'+"</button>"+
-                            "<button class='fr btn'"+ "likeId="+3+" storyId="+data.data[i].storyId+">"+'很喜欢'+"</button>"+
-                            "<button class='fr btn'"+ "likeId="+2+"  storyId="+data.data[i].storyId+">"+'喜欢'+"</button>"+
-                            "<button class='fr btn'"+ "likeId="+1+"  storyId="+data.data[i].storyId+">"+'一般喜欢'+"</button>"+
-                            "<button class='fr btn'"+ "likeId="+0+" storyId="+data.data[i].storyId+">"+'不喜欢'+"</button>"+
-                            "</div>";
-                    }else if(data.data[i].likeId==1){
-                        start+="<div class='cl evaluate'>"+
-                            "<button class='fr btn'"+ "likeId="+4+" storyId="+data.data[i].storyId+">"+'最喜欢'+"</button>"+
-                            "<button class='fr btn'"+ "likeId="+3+" storyId="+data.data[i].storyId+">"+'很喜欢'+"</button>"+
-                            "<button class='fr btn'"+ "likeId="+2+"  storyId="+data.data[i].storyId+">"+'喜欢'+"</button>"+
-                            "<button class='fr btn btnAdd'"+ "likeId="+1+"  storyId="+data.data[i].storyId+">"+'一般喜欢'+"</button>"+
-                            "<button class='fr btn'"+ "likeId="+0+" storyId="+data.data[i].storyId+">"+'不喜欢'+"</button>"+
-                            "</div>";
-                    }else if(data.data[i].likeId==2){
-                        start+="<div class='cl evaluate'>"+
-                            "<button class='fr btn'"+ "likeId="+4+" storyId="+data.data[i].storyId+">"+'最喜欢'+"</button>"+
-                            "<button class='fr btn'"+ "likeId="+3+" storyId="+data.data[i].storyId+">"+'很喜欢'+"</button>"+
-                            "<button class='fr btn btnAdd'"+ "likeId="+2+"  storyId="+data.data[i].storyId+">"+'喜欢'+"</button>"+
-                            "<button class='fr btn'"+ "likeId="+1+"  storyId="+data.data[i].storyId+">"+'一般喜欢'+"</button>"+
-                            "<button class='fr btn'"+ "likeId="+0+" storyId="+data.data[i].storyId+">"+'不喜欢'+"</button>"+
-                            "</div>";
-                    }else if(data.data[i].likeId==3){
-                        start+="<div class='cl evaluate'>"+
-                            "<button class='fr btn'"+ "likeId="+4+" storyId="+data.data[i].storyId+">"+'最喜欢'+"</button>"+
-                            "<button class='fr btn btnAdd'"+ "likeId="+3+" storyId="+data.data[i].storyId+">"+'很喜欢'+"</button>"+
-                            "<button class='fr btn'"+ "likeId="+2+"  storyId="+data.data[i].storyId+">"+'喜欢'+"</button>"+
-                            "<button class='fr btn'"+ "likeId="+1+"  storyId="+data.data[i].storyId+">"+'一般喜欢'+"</button>"+
-                            "<button class='fr btn'"+ "likeId="+0+" storyId="+data.data[i].storyId+">"+'不喜欢'+"</button>"+
-                            "</div>";
-                    } else if(data.data[i].likeId==4){
-                        start+="<div class='cl evaluate'>"+
-                            "<button class='fr btn btnAdd'"+ "likeId="+4+" storyId="+data.data[i].storyId+">"+'最喜欢'+"</button>"+
-                            "<button class='fr btn'"+ "likeId="+3+" storyId="+data.data[i].storyId+">"+'很喜欢'+"</button>"+
-                            "<button class='fr btn'"+ "likeId="+2+"  storyId="+data.data[i].storyId+">"+'喜欢'+"</button>"+
-                            "<button class='fr btn'"+ "likeId="+1+"  storyId="+data.data[i].storyId+">"+'一般喜欢'+"</button>"+
-                            "<button class='fr btn'"+ "likeId="+0+" storyId="+data.data[i].storyId+">"+'不喜欢'+"</button>"+
-                            "</div>";
-                    }
-                }else{
-                    start+="<div class='cl evaluate'>"+
-                        "<button class='fr btn'"+ "likeId="+4+" storyId="+data.data[i].storyId+">"+'最喜欢'+"</button>"+
-                        "<button class='fr btn'"+ "likeId="+3+" storyId="+data.data[i].storyId+">"+'很喜欢'+"</button>"+
-                        "<button class='fr btn'"+ "likeId="+2+"  storyId="+data.data[i].storyId+">"+'喜欢'+"</button>"+
-                        "<button class='fr btn'"+ "likeId="+1+"  storyId="+data.data[i].storyId+">"+'一般喜欢'+"</button>"+
-                        "<button class='fr btn btnAdd'"+ "likeId="+0+" storyId="+data.data[i].storyId+">"+'不喜欢'+"</button>"+
-                        "</div>";
-                }
-                var list_th = "<div class='container' style='border-bottom: 1px solid rgb(218, 224, 235);'>"+
-                    " <div class='container story'>" +
-                    "<div class='describe'>" +
-                    "<div>"+
-                    "<p>"+
-                    "<span class='userName'>"+ data.data[i].userName +"</span>"+
-                    "<span>"+ data.data[i].creationTime +"</span>"+
-                    "</p>"+
-                    "<p>"+ data.data[i].storyContent +"</p>"+
-                    "</div>"+
-                    "</div>" +
-                    "<div class='row'>" +
-                    imgList+
-                    "</div>" +
-                    start+
-                    "</div>"+
-                    "</div>";
-                html += list_th;
-            }
-            $("#add-list").append(html);//追加到标签最后
-            // console.log(html);
+            INDEXDB.addData(myDB.db, myDB.ojstore.name, data.data);
+
+            setTimeout(draw(), 300)
         });
 
-        window.onload = function(){
+        window.onload = function () {
             //要执行的js代码段
-            var userName=GetQueryValue('userName');
+            var userName = GetQueryValue('userName');
             // console.log(userName);
-            var userId=GetQueryValue('userId');
+            var userId = GetQueryValue('userId');
             // console.log(userId);
-            if(userId){
-                $('#home-href').attr('href','newStory.html?userId='+userId+'&userName='+userName);
-            }else{
-                $('#home-href').attr('href','login.html');
+            if (userId) {
+                $('#home-href').attr('href', 'newStory.html?userId=' + userId + '&userName=' + userName);
+            } else {
+                $('#home-href').attr('href', 'login.html');
             }
-            if(userId){
+
+            if (userId) {
                 $(".ol-nav li:first-child").addClass("li-select").siblings().removeClass("li-select");
-                storyList(userId,0);
-            }else{
+                storyList(userId, 0);
+            } else {
                 $(".ol-nav li:last-child").addClass("li-select").siblings().removeClass("li-select");
-                storyList('',1);
+                storyList('', 1);
             }
 
             $(".ol-nav li").click(function () {
@@ -254,65 +267,66 @@
                 console.log(index);
                 console.log($('#add-list').children());
                 $('#add-list').empty();
-                storyList(userId,index);
+                storyList(userId, index);
             });
 
-            $(document).on('click','.btn',function(event){
+            $(document).on('click', '.btn', function (event) {
                 $(this).addClass("btnAdd");
                 $(this).siblings(".btn").removeClass("btnAdd");
-                let storyId=$(this).attr("storyId");
-                let likeId=$(this).attr("likeId");
-                if(userId){
-                    socket.emit('changeLike', {userId:userId,storyId:storyId,likeId:likeId,likeName:'',creationTime:new Date().getTime()});
-                }else{
-                    window.location.href="login.html";
+                let storyId = $(this).attr("storyId");
+                let likeId = $(this).attr("likeId");
+                if (userId) {
+                    socket.emit('changeLike', { userId: userId, storyId: storyId, likeId: likeId, likeName: '', creationTime: new Date().getTime() });
+                } else {
+                    window.location.href = "login.html";
                 }
             });
             socket.on('changeLikeResult', function (data) {
-                console.log('changeLikeResult',data);
-                if(data.code=='200'){
+                console.log('changeLikeResult', data);
+                if (data.code == '200') {
                     alert('评价成功');
                     // window.location.reload();
-                }else{
+                } else {
                     alert(data.msg);
                 }
             });
         };
-
-
     </script>
 </head>
-<body>
-<div style="background-color:#515bbc;">
-    <div class="container">
-        <nav class="navbar navbar-default" style="margin-bottom: 0;border-radius: 0;background-color:#515bbc;border-color: #515bbc">
-            <div class="container-fluid">
-                <!-- Brand and toggle get grouped for better mobile display -->
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="#">故事</a>
-                </div>
 
-                <!-- Collect the nav links, forms, and other content for toggling -->
-                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                    <ul class="nav navbar-nav">
-                        <li class="active"><a href="#">首页</a></li>
-                        <li><a id="home-href" href="newStory.html">创建故事</a></li>
-                    </ul>
+<body>
+    <div style="background-color:#515bbc;">
+        <div class="container">
+            <nav class="navbar navbar-default" style="margin-bottom: 0;border-radius: 0;background-color:#515bbc;border-color: #515bbc">
+                <div class="container-fluid">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
+                            aria-expanded="false">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="#">故事</a>
+                    </div>
+
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <ul class="nav navbar-nav">
+                            <li class="active"><a href="#">首页</a></li>
+                            <li><a id="home-href" href="newStory.html">创建故事</a></li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
-        </nav>
+            </nav>
+        </div>
     </div>
-</div>
-<ol class="cl ol-nav">
-    <li class="fl" style="margin-right: 10px;">推荐</li>
-    <li class="fl">最新</li>
-</ol>
-<div id="add-list"></div>
+    <ol class="cl ol-nav">
+        <li class="fl" style="margin-right: 10px;">推荐</li>
+        <li class="fl">最新</li>
+    </ol>
+    <div id="add-list"></div>
 </body>
+
 </html>
