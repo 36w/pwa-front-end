@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <!--<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">-->
-    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
     <title>注册</title>
     <meta name="description" content="">
     <meta name="author" content="">
@@ -63,8 +62,8 @@
     <script src="socket.io.js"></script>
     <script type="text/javascript">
         // 建立连接
-        // var socket = io.connect('http://localhost:8081');
-        var socket = io.connect('http://192.168.99.39:8081');
+        var socket = io.connect('http://localhost:8081');
+        // var socket = io.connect('http://192.168.99.39:8081');
         // var socket = io.connect('http://192.168.124.11:8081');
         if ('serviceWorker' in navigator) { // 浏览器支持SW
             navigator.serviceWorker.register('sw.js').then(function (registration) {
@@ -74,7 +73,6 @@
             });
         }
         function register() {
-            // document.getElementById('#form1');
             let date = new Date();
             let year = date.getFullYear();
             let month = date.getMonth() + 1;

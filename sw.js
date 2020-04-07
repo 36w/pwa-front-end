@@ -69,13 +69,6 @@ self.addEventListener('fetch', function (event) {
                 if (!httpRes || httpRes.status !== 200) {
                     return httpRes;
                 }
-
-                // 请求成功的话，将响应添加到缓存中
-                // 下一次请求相同资源时直接从缓存中拿资源，就不用再发请求了
-                // var responseClone = httpRes.clone();
-                // caches.open(version).then(function (cache) {
-                //     cache.put(event.request, responseClone);
-                // });
                 return httpRes;
             });
         })
