@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <!--<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
     <title>登录</title>
     <meta name="description" content="">
@@ -74,7 +73,6 @@
             });
         }
         function login() {
-            // socket.emit('login', { username: 'xulei',password:'123456'});
             if($('#userName').val()){
                 if($('#password').val()){
                     socket.emit('login', { userName:$('#userName').val(),password:$('#password').val()});
@@ -121,14 +119,14 @@
                                 <div class="form-group">
                                     <label>用户名</label>
                                     <input type="email" class="form-control input-style" id="userName" placeholder="请输入用户名">
-                                </div><!--/.form-group -->
+                                </div>
                                 <div class="form-group">
                                     <label>密码</label>
                                     <input type="password" class="form-control input-style" id="password" placeholder="请输入密码">
-                                </div><!--/.form-group -->
-                            </form><!--/form -->
-                        </div><!--/.signin-form -->
-                    </div><!--/.col -->
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
                 <p class="go-register" style="text-align: right;"><a href="register.html">没有账号，去注册</a></p>
                 <div class="row">
