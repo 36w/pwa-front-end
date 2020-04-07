@@ -9,6 +9,7 @@ login.html        用户登录页面
 register.html     用户注册页面
 newStory.html     发表故事页面
 socket.io.js      数据通讯文件
+indexedDB.js      客户端存储数据
 sw.js             页面离线缓存文件
 manifest.json     配置应用相关信息文件（目的是提供将应用添加至桌面的功能）
 
